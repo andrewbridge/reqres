@@ -66,6 +66,10 @@ button {
   padding-left: 24px;
   padding-right: 24px; }
 
+.try-link {
+  text-decoration: none;
+}
+
 .tagline, h2 {
   color: #fff;
   font-size: 28px;
