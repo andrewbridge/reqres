@@ -112,6 +112,10 @@ module.exports = {
 
   logout: function(req, res, next) {
     return res.status(200).send({});
+  },
+
+  redirect: function(req, res, next) {
+    return res.redirect(302, req.query.url);
   }
 };
 
