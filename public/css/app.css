@@ -70,6 +70,10 @@ button {
   padding-left: 24px;
   padding-right: 24px; }
 
+#console.try-api-links a {
+  text-decoration: none;
+}
+
 .tagline, h2 {
   color: #fff;
   font-size: 28px;

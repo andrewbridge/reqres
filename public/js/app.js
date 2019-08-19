@@ -111,6 +111,10 @@ window.addEventListener(
 
   var urlEl = consoleEl.querySelector("[data-key='url']");
 
+  var requestOutputLinkEl = consoleEl.querySelector(
+    "[data-key='request-output-link']"
+  );
+
   var responseCodeEl = consoleEl.querySelector("[data-key='response-code']");
 
   var sendRequestButton = consoleEl.querySelector("[data-key='send-request']");
@@ -122,17 +126,28 @@ window.addEventListener(
   );
 
   var spinnerEl = consoleEl.querySelector("[data-key='spinner']");
-  
+
   var timerID = null;
+
+  [].forEach.call(endpointEls, function(element) {
+    var key = element.getAttribute("data-id");
+    var linkEl = element.querySelector("[data-key='try-link']");
+    var finalURL = "/api/" + config[key].url;
+
+    linkEl.href = finalURL;
+  });
 
   [].forEach.call(endpointEls, function(el) {
     el.addEventListener("click", function(e) {
-      
+      e.preventDefault();
+
+      var element = e.currentTarget;
+
       clearTimeout(timerID);
       timerID = setTimeout(function() {
         var adEl = document.querySelector("#carbonads");
         if (adEl && typeof _carbonads !== "undefined") _carbonads.refresh();
-      }, 500)
+      }, 500);
 
       var element = e.currentTarget;
 
@@ -158,6 +173,7 @@ window.addEventListener(
 
       var finalURL = "/api/" + settings.url;
       urlEl.innerHTML = finalURL;
+      requestOutputLinkEl.href = finalURL;
 
       outputResponseEl.innerHTML = "";
       outputResponseEl.setAttribute("hidden", true);
