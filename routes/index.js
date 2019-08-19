@@ -116,15 +116,50 @@ module.exports = {
 };
 
 function returnAll(items, req, res) {
+  var filterByPreffix = "filter_by_";
   var page = parseInt(req.query.page, 10) || 1,
     pageSize = parseInt(req.query.per_page, 10) || config.pagination.page_size,
     offset = (page - 1) * pageSize,
-    paginatedItems = items.slice(offset, offset + pageSize);
+    filters = Object.keys(req.query)
+      .filter(key => key.indexOf(filterByPreffix) !== -1)
+      .map(key => key.replace(new RegExp(`^${filterByPreffix}`), ""))
+      .filter(key => key.length),
+    filteredItems = items.reduce(
+      (itemPrevious, itemCurrent) =>
+        itemPrevious.concat(
+          filters.reduce(
+            (filterPrevious, filterCurrent) =>
+              !filterPrevious
+                ? false
+                : !(
+                    typeof itemCurrent[filterCurrent] !== "string" ||
+                    itemCurrent[filterCurrent].indexOf(
+                      query[`${filterByPreffix}${filterCurrent}`]
+                    ) === -1
+                  ),
+            true
+          )
+            ? [itemCurrent]
+            : []
+        ),
+      []
+    ),
+    /*filteredItems = items.filter(item => {
+			for(let filter of filters) {
+				if (typeof item[filter] !== 'string' || item[filter].indexOf(query[`${filterByPreffix}${filter}`]) === -1) {
+					return false;
+				}
+			}
+
+			return true;
+		}),*/
+    paginatedItems = filteredItems.slice(offset, offset + pageSize);
+
   return res.status(200).send({
     page: page,
     per_page: pageSize,
-    total: items.length,
-    total_pages: Math.ceil(items.length / pageSize),
+    total: filteredItems.length,
+    total_pages: Math.ceil(filteredItems.length / pageSize),
     data: paginatedItems
   });
 }
