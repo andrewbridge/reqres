@@ -61,6 +61,8 @@ app.post("/api/register/", routes.register);
 app.post("/api/logout", routes.logout);
 app.post("/api/logout/", routes.logout);
 
+app.post("/api/redirect", routes.redirect);
+
 app.get("/api/:resource/*", routes.get);
 app.get("/api/:resource", routes.get);
 
