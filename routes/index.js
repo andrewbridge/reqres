@@ -52,8 +52,9 @@ module.exports = {
   login: function(req, res, next) {
     if (req.body.username || req.body.email) {
       if (req.body.password) {
+        const username = req.body.username || req.body.email;
         const user = data.users.find(
-          usersearch => usersearch.email === req.body.email
+          usersearch => usersearch.email === username
         );
         if (user) {
           const token = data.tokens.find(token => token.id === user.id);
@@ -82,8 +83,9 @@ module.exports = {
   register: function(req, res, next) {
     if (req.body.username || req.body.email) {
       if (req.body.password) {
+	const username = req.body.username || req.body.email;
         const user = data.users.find(
-          usersearch => usersearch.email === req.body.email
+          usersearch => usersearch.email === username
         );
         if (user) {
           const token = data.tokens.find(token => token.id === user.id);
